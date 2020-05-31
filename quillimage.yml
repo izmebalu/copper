@@ -1,0 +1,25 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+  - name: Buid an image using dockerfile
+    command: docker build -t corona:1.0 .
+    args:
+      chdir: /opt/docker
+
+  - name: creating a tag to the image
+    command: docker tag corona:1.0 izmebalu/corona:1.0
+    ignore_errors: yes
+
+  - name: login to DockerHub remote registry using your account
+    docker_login:
+      username: izmebalu
+      password: oneplus5vr!2
+
+  - name: sending image to the dockerhub
+    command: docker push izmebalu/corona:1.0
+    ignore_errors: yes
+
+  - name: Removing image from docker
+    command: docker rmi corona:1.0 izmebalu/corona:1.0
